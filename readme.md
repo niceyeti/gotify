@@ -1,6 +1,6 @@
-# Gotify: Go Notifications for Linux Dudes
+# Gotify: Crawl Notifications in Go for Linux Dudes
 
-![It may not spark joy, but it gets the job done](goatboy.png)
+![It may not spark joy, but it gets the job done](misc/goatboy.png)
 
 Sometimes you're a hillbilly with a wrench.
 

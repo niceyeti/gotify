@@ -194,10 +194,15 @@ var (
 
 func main() {
 	var err error
+	if err = os.MkdirAll("results", 0o777); err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
 	// Future: use a proper logging interface instead.
 	// Teeing to stdout like this is not thread safe.
 	var errf *os.File
-	if errf, err = os.Create("err.txt"); err != nil {
+	if errf, err = os.Create("results/err.txt"); err != nil {
 		fmt.Println(err.Error())
 		return
 	}
@@ -206,7 +211,7 @@ func main() {
 	stderr := io.MultiWriter(errf, os.Stdout)
 
 	var logf *os.File
-	if logf, err = os.Create("log.txt"); err != nil {
+	if logf, err = os.Create("results/log.txt"); err != nil {
 		fmt.Fprintf(stderr, "%s", err.Error())
 		return
 	}
