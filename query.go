@@ -17,6 +17,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"strconv"
 	"strings"
 	"time"
@@ -192,6 +193,11 @@ var (
 	}
 )
 
+func fileExists(path string) bool {
+	_, err := os.Stat(path)
+	return err == nil
+}
+
 func main() {
 	var err error
 	if err = os.MkdirAll("results", 0o777); err != nil {
@@ -228,6 +234,17 @@ func main() {
 	for _, r := range results {
 		if _, err = fmt.Fprintf(log, "\nSource entity '%s', found at %s:\n    %s\n", r.source.entities, r.source.url, r.description); err != nil {
 			fmt.Fprintf(stderr, "%s", err.Error())
+		}
+	}
+
+	// Send results via OS notification interface
+	if len(results) > 0 {
+		var execPath string
+		if execPath, err = exec.LookPath("notify-send"); err == nil {
+			cmd := exec.Command(execPath, "gotify", "Gotify results found, see output files.")
+			_ = cmd.Run()
+		} else {
+			fmt.Fprintf(log, "notify-send not found (are you running within a container?)\n")
 		}
 	}
 
